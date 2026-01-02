@@ -57,7 +57,7 @@ export async function updateNote(req, res) {
         const { title, content } = req.body;
 
         // Fetch a document by its ID and update it
-        // NOTE: 'req.params.id' is the query parameter called 'id'
+        // NOTE: 'req.params.id' is the url parameter called 'id'
         // NOTE: { new: true } returns the document after the update 
         // NOTE: { new: false } returns the document before the update -> default behaviour
         const updatedNote = await Note.findByIdAndUpdate(req.params.id,
