@@ -19,6 +19,9 @@ const noteSchema = new mongoose.Schema(
 );
 
 // Create a model off that schema
+// NOTE: 'notes' collection gets created automatically
+// 'Note' is a representation of 'notes' collection
 const Note = mongoose.model("Note", noteSchema);
 
+// Export the Model object
 export default Note;
