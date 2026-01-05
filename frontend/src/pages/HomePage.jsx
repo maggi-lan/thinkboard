@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { LoaderIcon } from 'lucide-react';
 
 import Navbar from '../components/Navbar.jsx';
 import Notecard from '../components/Notecard.jsx';
@@ -47,7 +48,12 @@ function HomePage() {
             { isRateLimited && <RateLimitedUI />}
 
             <div className="max-w-7xl mx-auto p-4 mt-6">
-                { loading && <div className="text-center text-primary py-10">Loading notes...</div> }
+                { loading &&
+                    <div className="min-h-screen bg-base-200 flex items-center justify-center">
+                        <LoaderIcon className="animate-spin size-10" />
+                    </div>
+                }
+
 
                 { notes.length == 0 && !isRateLimited && !loading && <NoNotesAvailable /> }
 

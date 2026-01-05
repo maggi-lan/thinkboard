@@ -12,7 +12,7 @@ function Notecard({ note, setNotes }) {
         if (!window.confirm("Are you sure that you want to delete this note?")) return;
 
         try {
-            api.delete(`/notes/${id}`);
+            await api.delete(`/notes/${id}`);
             setNotes((prev) => prev.filter(note => note._id != id));  // gets rid of the deleted note and causes a re-render
             toast.success("Note deleted successfully");
         }
