@@ -2,6 +2,7 @@
 import cors from "cors";
 import dotenv from "dotenv";
 import express from "express";
+import path from "path";
 
 import notesRoutes from "./routes/notesRoutes.js";
 import { connectDB } from "./config/db.js";
@@ -14,13 +15,40 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Middleware
-app.use(express.json());             // enable JSON body parsing
-app.use(cors({                       // allows frontend to access this API
-    origin: "http://localhost:5173",
-}));
-app.use(rateLimiter);                // adds a rate limiter
-app.use("/api/notes", notesRoutes);  // mounts the notes API routes
+// Fetch current directory
+const __dirname = path.resolve();
+
+
+
+
+// MIDDLEWARES
+
+// Enable JSON body parsing
+app.use(express.json());
+
+// Allows frontend to access this API during development
+if (process.env.NODE_ENV !== "production") {
+    app.use(cors({
+        origin: "http://localhost:5173",
+    }));
+}
+
+// Add a rate limiter
+app.use(rateLimiter);
+
+// Mount the notes API routes
+app.use("/api/notes", notesRoutes);
+
+// Serve the frontend in production
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+    app.get("*", (req, res) => {  // serve the react app for any route not matching notesRoutes
+        res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    });
+}
+
+
+
 
 // Connect to MongoDB database
 connectDB().then(() => {
